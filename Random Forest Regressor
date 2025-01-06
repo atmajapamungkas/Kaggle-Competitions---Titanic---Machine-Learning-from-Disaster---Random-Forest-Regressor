@@ -1,0 +1,56 @@
+import pandas as pd
+import numpy as np
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+
+
+file_path = 'test.csv'  
+df = pd.read_csv(file_path)
+
+
+print(df.columns)  
+
+
+df['Age'] = df['Age'].fillna(df['Age'].median())
+
+
+df['Fare'] = df['Fare'].fillna(df['Fare'].median())
+
+
+df.drop(['Cabin', 'Name', 'Ticket'], axis=1, inplace=True)
+
+
+df['Sex'] = df['Sex'].map({'male': 0, 'female': 1})
+df['Embarked'] = df['Embarked'].map({'S': 0, 'C': 1, 'Q': 2})
+df['Embarked'] = df['Embarked'].fillna(0)  
+
+
+train_df = pd.read_csv('train.csv') 
+
+
+train_df['Age'] = train_df['Age'].fillna(train_df['Age'].median())
+train_df['Fare'] = train_df['Fare'].fillna(train_df['Fare'].median())
+train_df.drop(['Cabin', 'Name', 'Ticket'], axis=1, inplace=True)
+train_df['Sex'] = train_df['Sex'].map({'male': 0, 'female': 1})
+train_df['Embarked'] = train_df['Embarked'].map({'S': 0, 'C': 1, 'Q': 2})
+train_df['Embarked'] = train_df['Embarked'].fillna(0)
+
+
+X_train = train_df.drop('Survived', axis=1)
+y_train = train_df['Survived']
+
+
+clf = RandomForestClassifier(n_estimators=100, random_state=42)
+clf.fit(X_train, y_train)
+
+y_pred = clf.predict(X_test)
+
+submission = pd.DataFrame({
+    'PassengerId': df['PassengerId'], 
+    'Survived': y_pred  
+})
+
+
+submission.to_csv('submission.csv', index=False)
+
+print("Hasil prediksi telah disimpan dalam 'submission.csv'")
