@@ -1,0 +1,33 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Load the dataset
+file_path = 'test.csv'  # Sesuaikan dengan lokasi file di Google Colab
+df = pd.read_csv(file_path)
+
+# Setting up the visual style
+sns.set(style="whitegrid")
+
+# Create a figure with multiple subplots
+fig, axes = plt.subplots(2, 2, figsize=(15, 12))
+
+# Plot distribution of Age
+sns.histplot(df['Age'].dropna(), bins=30, kde=True, ax=axes[0, 0])
+axes[0, 0].set_title('Distribution of Age')
+
+# Plot distribution of Fare
+sns.histplot(df['Fare'].dropna(), bins=30, kde=True, ax=axes[0, 1])
+axes[0, 1].set_title('Distribution of Fare')
+
+# Plot count of passengers by Pclass
+sns.countplot(x='Pclass', data=df, ax=axes[1, 0])
+axes[1, 0].set_title('Number of Passengers by Pclass')
+
+# Plot count of passengers by Embarked
+sns.countplot(x='Embarked', data=df, ax=axes[1, 1])
+axes[1, 1].set_title('Number of Passengers by Embarked')
+
+# Adjust layout
+plt.tight_layout()
+plt.show()
